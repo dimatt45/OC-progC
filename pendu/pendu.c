@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
         {
              nombreCoups--;
         }
-        compare = strcmp( motSecret, motTrouve);
-        if (compare == 0)
-        { gagne = 1;};
+        else {
+             gagne = verif(motTrouve);
+             };
         } while (nombreCoups != 0 && gagne != 1 );
     if (gagne)
         { printf("\n\nBravo ! Vous avez gagne !!!!! \n\n");}
@@ -128,4 +128,21 @@ void initMotSecret ( char chain[])
     }
 
     ;
+}
+int verif ( char mot[] )
+{
+     int i;
+     int pasFini = 0;
+     for (i = 0; i < strlen(mot); i++)
+    {
+        if (mot[i] = '*'){
+            pasFini++ ;
+        }
+    if (pasFini = 0)
+    { return 1;
+    }
+    else { return 0;};
+        
+    }
+       
 }
