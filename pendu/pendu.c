@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <time.h>
 #include "pendu.h"
 
 
@@ -9,9 +10,10 @@
 int main(int argc, char *argv[])
 {
     printf("Bienvenue dans le PENDU !\n\n");
-    char motSecret[] = "ROUGE";
-    char motTrouve[100] = {0};
+    char motSecret[100] = {0};
+    initMotSecret ( motSecret);
     printf ("Le mot a trouver est : %s\n\n", motSecret);
+    char motTrouve[100] = {0};
     initMotTrouve ( motTrouve , strlen(motSecret));
     int nombreCoups = 10;
     int gagne = 0;
@@ -34,9 +36,10 @@ int main(int argc, char *argv[])
         { gagne = 1;};
         } while (nombreCoups != 0 && gagne != 1 );
     if (gagne)
-        { printf("\n\nBravo ! Vous avez gagne !!!!! ");}
+        { printf("\n\nBravo ! Vous avez gagne !!!!! \n\n");}
         else 
-        {printf("PERDU ! " );};
+        {printf("PERDU !  \n\n");};
+    system("PAUSE");
     return 0;
 
 }
@@ -55,10 +58,11 @@ char lireCaractere()
 void initMotTrouve ( char chain[], int longueurMot)
 {
     int i;
-     for (i = 0; i < longueurMot; i++)
+     for (i = 0; i < longueurMot-1; i++)
     {
         chain[i] = '*';
     }
+    ;
 }
 int comparerCaractere( const char caractere, const char motSecret[], char motTrouve[] )
 {
@@ -72,4 +76,55 @@ int comparerCaractere( const char caractere, const char motSecret[], char motTro
         result = 1;
     }}
     return result ; 
+}
+
+void initMotSecret ( char chain[])
+{
+    FILE* fichier = NULL;
+
+    fichier = fopen("pendu.txt", "r+");
+
+    if (fichier != NULL)
+    {
+        char caractereActuel = 0 ;
+        int nbLignes = 0;
+        // On lit et on écrit dans le fichier
+        // Boucle de lecture des caractères un à un
+        do
+        {
+            caractereActuel = fgetc(fichier); // On lit le caractère
+            if (caractereActuel == '\n') 
+            { nbLignes++ ;}; // On compte le nombre de lignes
+            printf("%d", nbLignes); // On l'affiche
+        } while (caractereActuel != EOF); // On continue tant que fgetc n'a pas retourné EOF (fin de fichier)
+        int nombreMystere = 0;
+        int ligne = 0;
+        
+        // Génération du nombre aléatoire
+
+        srand(time(NULL));
+        nombreMystere = (rand() % (nbLignes)) + 1 ;
+        printf("Le nombreMystere est : %d\n\n", nombreMystere);
+        rewind(fichier);
+        if (nombreMystere !=1) {
+            do
+            {
+            
+            caractereActuel = fgetc(fichier); // On lit le caractère
+            if (caractereActuel == '\n') 
+            { ligne++ ;};
+            printf("%d", ligne); // On l'affiche
+            } while (ligne != nombreMystere-1); 
+            fgets( chain , 100 , fichier); // On lit maximum TAILLE_MAX caractères du fichier, on stocke le tout dans "chaine"
+            printf("Le mot choisi est : %s\n\n", chain);
+        }
+        else {
+            fgets( chain , 100 , fichier); // On lit maximum TAILLE_MAX caractères du fichier, on stocke le tout dans "chaine"
+            printf("Le mot choisi est : %s\n\n", chain);
+            };
+        
+        fclose(fichier); // On ferme le fichier qui a été ouvert
+    }
+
+    ;
 }
