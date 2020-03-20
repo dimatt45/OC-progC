@@ -62,7 +62,8 @@ void initMotTrouve ( char chain[], int longueurMot)
     {
         chain[i] = '*';
     }
-    ;
+    chain[longueurMot-1] = '\0';
+    
 }
 int comparerCaractere( const char caractere, const char motSecret[], char motTrouve[] )
 {
